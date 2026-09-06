@@ -80,6 +80,28 @@ public:
 };
 ```
 
+### 周日复习版
+
+```c++
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+     	unordered_map<int,int> hash;
+        for(int i = 0; i < nums.size(); i++){
+            int need = target - nums[i];
+            auto it = hash.find(need); //忘记了使用迭代器 而是直接使用下面的部分
+            if(hash.find(need) != hash.end() ){
+                return {hash(need),i}; //这里错误的使用了hash的读取方式 正确的应该是hash[need]
+            }
+            hash[nums[i]]=i;
+        }
+        return {};
+    }
+};
+```
+
+
+
 ## 49.字母异位词分组
 
 给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。
@@ -132,6 +154,30 @@ public:
     }
 };
 ```
+
+### 周日复习版
+
+```c++
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string,vector<string>> hash;
+
+        for(string s : strs){
+            string key = s;
+            sort(key.begin(),key.end()); //忘记了排序 忘记了如何排序
+            hash[key].push_back(s); //push_back的前后都不知道 不知道push_back谁 也不是到给谁push_back
+        }
+        vector<vector<string>> result;
+        for(auto&pair : hash){ //忘记了如何遍历 遍历谁 如何遍历hash
+            result.push_back(pair.second);
+        }
+        return result;
+    }
+};
+```
+
+
 
 ## 128.最长连续序列
 
@@ -192,6 +238,35 @@ public:
     }
 };
 ```
+
+### 周日复习版
+
+```c++
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> set;
+        for(int num:nums){
+            set.insert(num); //这一块直接忘掉 忘记给set赋值
+        }
+        int result = 0;
+        for(int num : set){
+            if(set.find(num-1)==set.end()){ //通过find以及和end()比较的形式来确定是否查找到
+                int current = num;
+                int length = 1; //这里长度直接为1了
+                while(set.find(current+1)!=set.end()){//这里进行判断和比较的是current 而非num了
+                    current++;
+                    length++;
+                }
+                result = max(result,length);
+            }
+        }
+        return result;
+    }
+};
+```
+
+
 ## 283.移动零
 
 给定一个数组 `nums`，编写一个函数将所有 `0` 移动到数组的末尾，同时保持非零元素的相对顺序。
@@ -235,6 +310,10 @@ public:
     }
 };
 ```
+
+### 周日复习版
+
+### 通过
 
 
 
