@@ -367,6 +367,146 @@ public:
     }
 };
 ```
+
+## 15.三数之和
+
+给你一个整数数组 `nums` ，判断是否存在三元组 `[nums[i], nums[j], nums[k]]` 满足 `i != j`、`i != k` 且 `j != k` ，同时还满足 `nums[i] + nums[j] + nums[k] == 0` 。请你返回所有和为 `0` 且不重复的三元组。
+
+**注意：**答案中不可以包含重复的三元组。
+
+**示例 1：**
+
+```
+输入：nums = [-1,0,1,2,-1,-4]
+输出：[[-1,-1,2],[-1,0,1]]
+解释：
+nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0 。
+nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0 。
+nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。
+不同的三元组是 [-1,0,1] 和 [-1,-1,2] 。
+注意，输出的顺序和三元组的顺序并不重要。
+```
+
+**示例 2：**
+
+```
+输入：nums = [0,1,1]
+输出：[]
+解释：唯一可能的三元组和不为 0 。
+```
+
+**示例 3：**
+
+```
+输入：nums = [0,0,0]
+输出：[[0,0,0]]
+解释：唯一可能的三元组和为 0 。
+```
+
+**提示：**
+
+- `3 <= nums.length <= 3000`
+- `-105 <= nums[i] <= 105`
+
+### 排序＋双指针 去重是关键
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> result;
+        sort(nums.begin(),nums.end());
+        for(int i = 0; i < nums.size()-2; i++){
+            //先给第一个去重
+            if(i > 0 && nums[i]==nums[i-1]){
+                    continue;
+                }
+            if(nums[i]>0){
+                    break;
+                }
+            int left = i+1;
+            int right = nums.size()-1;
+            while(left<right){
+                int n = nums[i]+nums[left]+nums[right];
+                if(n==0){
+                    result.push_back({nums[i],nums[left],nums[right]});
+                    while(left < right && nums[left]==nums[left+1]){
+                        left++;
+                    }
+                    while(left < right && nums[right]==nums[right-1]){
+                        right--;
+                    }
+                    left++;
+                    right--;
+                }
+                if(n<0){
+                    left++;
+                }
+                if(n>0){
+                    right--;
+                }
+            }
+        }
+        return result;
+    }
+};
+```
+
+## 3.无重复字符的最长子串
+
+给定一个字符串 `s` ，请你找出其中不含有重复字符的 **最长 子串** 的长度。
+
+**示例 1:**
+
+```
+输入: s = "abcabcbb"
+输出: 3 
+解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。注意 "bca" 和 "cab" 也是正确答案。
+```
+
+**示例 2:**
+
+```
+输入: s = "bbbbb"
+输出: 1
+解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+```
+
+**示例 3:**
+
+```
+输入: s = "pwwkew"
+输出: 3
+解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+     请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+```
+
+**提示：**
+
+- `0 <= s.length <= 105`
+- `s` 由英文字母、数字、符号和空格组成
+
+```c++
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_set<char> set;
+        int left = 0;
+        int result = 0;
+        for(int right = 0; right<s.size();right++){
+            while(set.find(s[right])!=set.end()){
+                set.erase(s[left]);
+                left++;
+            }
+            set.insert(s[right]);
+            result = max(result,right-left+1);
+        }
+        return result;
+    }
+};
+```
+
+
 ## 206.反转链表
 
 给你单链表的头节点 `head` ，请你反转链表，并返回反转后的链表。
