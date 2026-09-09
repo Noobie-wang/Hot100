@@ -569,6 +569,136 @@ public:
     }
 };
 ```
+## 438.找到字符串中所有字母异位词
+
+给定两个字符串 `s` 和 `p`，找到 `s` 中所有 `p` 的 **异位词** 的子串，返回这些子串的起始索引。不考虑答案输出的顺序。
+
+**示例 1:**
+
+```
+输入: s = "cbaebabacd", p = "abc"
+输出: [0,6]
+解释:
+起始索引等于 0 的子串是 "cba", 它是 "abc" 的异位词。
+起始索引等于 6 的子串是 "bac", 它是 "abc" 的异位词。
+```
+
+ **示例 2:**
+
+```
+输入: s = "abab", p = "ab"
+输出: [0,1,2]
+解释:
+起始索引等于 0 的子串是 "ab", 它是 "ab" 的异位词。
+起始索引等于 1 的子串是 "ba", 它是 "ab" 的异位词。
+起始索引等于 2 的子串是 "ab", 它是 "ab" 的异位词。
+```
+
+**提示:**
+
+- `1 <= s.length, p.length <= 3 * 104`
+- `s` 和 `p` 仅包含小写字母
+
+```c++
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        vector<int> result;
+        if(s.size()<p.size()){
+            return result;
+        }
+        vector<int> pcount(26,0);
+        vector<int> windowcount(26,0);
+        for(char c : p){
+            pcount[c - 'a']++;
+        }
+        int left = 0;
+        for(int right = 0; right < s.size(); right++){
+            windowcount[s[right] - 'a']++;
+            if(right - left + 1 > p.size()){
+                windowcount[s[left] - 'a']--;
+                left++;
+            }
+            if(right - left + 1 == p.size()){
+                if(pcount == windowcount){
+                    result.push_back(left);
+                }
+            }
+        }
+        return result;
+    }
+};
+```
+
+## 560.和为 K 的子数组
+
+给你一个整数数组 `nums` 和一个整数 `k` ，请你统计并返回 *该数组中和为 `k` 的子数组的个数* 。子数组是数组中元素的连续非空序列。
+
+**示例 1：**
+
+```
+输入：nums = [1,1,1], k = 2
+输出：2
+```
+
+**示例 2：**
+
+```
+输入：nums = [1,2,3], k = 3
+输出：2
+```
+
+**提示：**
+
+- `1 <= nums.length <= 2 * 104`
+- `-1000 <= nums[i] <= 1000`
+- `-107 <= k <= 107`
+
+### 首先想到的是暴力
+
+```c++
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        int result = 0;
+        for(int left = 0;left<nums.size();left++){
+            int sum = 0;
+            for(int right = left; right < nums.size(); right++){
+                sum += nums[right];
+                if(sum == k){
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+};
+```
+
+但是复杂度太高了 超出时间限制
+
+### 然后使用前缀和 通过转换 然后转化为了两数之和  后面的前缀和--前面的前缀和=目标k 因此是前缀和+哈希
+
+```c++
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        unordered_map<int,int> hash;
+        hash[0] = 1;
+        int sum = 0;
+        int result = 0;
+        for(int num : nums){
+            sum += num;
+            if(hash.find(sum-k)!=hash.end()){
+                result += hash[sum - k];
+            }
+            hash[sum]++;
+        }
+        return result;
+    }
+};
+```
+
 
 
 
