@@ -368,6 +368,32 @@ public:
 };
 ```
 
+### 周四复习版 完成
+
+```c++
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int left = 0;
+        int result = 0;
+        int right = height.size()-1;
+        while(left < right){
+            int area = (right - left) * min(height[left],height[right]);
+            result = max(result,area);
+            if(height[left]<=height[right]){
+                left++;
+            }
+            else{
+                right--;
+            }
+        }
+        return result;
+    }
+};
+```
+
+
+
 ## 15.三数之和
 
 给你一个整数数组 `nums` ，判断是否存在三元组 `[nums[i], nums[j], nums[k]]` 满足 `i != j`、`i != k` 且 `j != k` ，同时还满足 `nums[i] + nums[j] + nums[k] == 0` 。请你返回所有和为 `0` 且不重复的三元组。
@@ -452,6 +478,52 @@ public:
 };
 ```
 
+### 周四复习版
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> result;
+        sort(nums.begin(),nums.end());
+        for(int i = 0 ;i < nums.size()-2;i++){ //i最大为nums.size()-2 因为要为left和right服务
+            if(i>0 && nums[i]==nums[i-1]){
+                continue;    //给固定的第一个去重 
+            }
+            if(nums[i]>0){
+                break;    //如果第一个就大于0 那就没办法玩了
+            }
+            int left = i+1;
+            int right = nums.size()-1;
+            while(left < right){  //在此时开启第二个循环 关于固定一个外围的情况下 双指针的循环
+                int sum = nums[i] + nums[left] + nums[right];
+                if(sum == 0){
+                    result.push_back({nums[i],nums[left],nums[right]}); //注意此处的push_back的括号 ({})
+                    while ((left < right) && nums[left]==nums[left+1]){
+                        left++;
+                    }
+                    while ((left < right) && nums[right]==nums[right-1]){
+                        right--;
+                    }
+                    left++;
+                    right--;
+                }
+                if(sum < 0){
+                    left++;
+                }
+                if(sum>0){
+                    right--;
+                }
+            }
+            
+        }
+        return result;
+    }
+};
+```
+
+
+
 ## 3.无重复字符的最长子串
 
 给定一个字符串 `s` ，请你找出其中不含有重复字符的 **最长 子串** 的长度。
@@ -505,6 +577,32 @@ public:
     }
 };
 ```
+
+### 周四复习版
+
+```c++
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_set<char> set; //不是键值对的时候 是不需要map的 我们只是存储一个序列 用set
+        int result = 0;
+        int left = 0;
+        for(int right = 0;right < s.size();right++){
+            while(set.find(s[right])!=set.end()){
+                set.erase(s[left]);//删除元素 以便于尽可能的找到后续可能还会有更大的值
+                left++;
+            }
+                set.insert(s[right]); //加入元素 作为重复数值判断的依据
+                int sum = right - left + 1;
+                result = max(result,sum);
+        }
+        return result;
+    }
+};
+```
+
+
+
 
 
 ## 206.反转链表
@@ -630,6 +728,41 @@ public:
 };
 ```
 
+### 周四复习版
+
+```c++
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        vector<int> pcount(26,0); // 数据类型为int 是为了存储数字
+        vector<int> windowcount(26,0); // 数据类型为int 是为了存储数字
+        vector<int> result;
+        if(s.size()<p.size()){
+            return result;
+        }
+        for(char c : p){ //数据类型为char
+            pcount[c - 'a']++; //为[] 而非()
+        }
+        int left = 0;
+        for(int right = 0; right < s.size(); right++){ //整段都忘记了怎么处理的了
+            windowcount[s[right] - 'a']++; 
+            if(right - left + 1 > p.size()){
+                windowcount[s[left] - 'a']--;
+                left++;
+            }
+            if(right - left + 1 == p.size()){
+                if(pcount == windowcount){
+                result.push_back(left);
+                }
+            }
+            
+        }
+        return result;
+    }
+};
+```
+
+
 ## 560.和为 K 的子数组
 
 给你一个整数数组 `nums` 和一个整数 `k` ，请你统计并返回 *该数组中和为 `k` 的子数组的个数* 。子数组是数组中元素的连续非空序列。
@@ -698,7 +831,9 @@ public:
     }
 };
 ```
-周四复习版
+### 周四复习版
+
+#### 完全没想起来
 
 
 
