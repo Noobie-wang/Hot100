@@ -835,6 +835,115 @@ public:
 
 #### 完全没想起来
 
+## 53.最大子数组和
+
+给你一个整数数组 `nums` ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。**子数组**是数组中的一个连续部分。
+
+**示例 1：**
+
+```
+输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+输出：6
+解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
+```
+
+**示例 2：**
+
+```
+输入：nums = [1]
+输出：1
+```
+
+**示例 3：**
+
+```
+输入：nums = [5,4,-1,7,8]
+输出：23
+```
+
+ 
+
+**提示：**
+
+- `1 <= nums.length <= 105`
+- `-104 <= nums[i] <= 104`
+
+###  暴力的复杂度为O(N^2) 现在使用的是动态规划 状态转移方程为
+
+```
+dp[i] = max(nums[i],dp[i-1]+nums[i])
+```
+
+```c++
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int current = nums[0];
+        int result = nums[0];
+        for(int i = 1; i < nums.size();i++){
+            current = max(nums[i],current+nums[i]);
+            result = max(current,result);
+        }
+        return result;
+    }
+};
+```
+
+## 56.合并区间
+
+以数组 `intervals` 表示若干个区间的集合，其中单个区间为 `intervals[i] = [starti, endi]` 。请你合并所有重叠的区间，并返回 *一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间* 。
+
+**示例 1：**
+
+```
+输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+输出：[[1,6],[8,10],[15,18]]
+解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+```
+
+**示例 2：**
+
+```
+输入：intervals = [[1,4],[4,5]]
+输出：[[1,5]]
+解释：区间 [1,4] 和 [4,5] 可被视为重叠区间。
+```
+
+**示例 3：**
+
+```
+输入：intervals = [[4,7],[1,4]]
+输出：[[1,7]]
+解释：区间 [1,4] 和 [4,7] 可被视为重叠区间。
+```
+
+**提示：**
+
+- `1 <= intervals.length <= 104`
+- `intervals[i].length == 2`
+- `0 <= starti <= endi <= 104`
+
+### 几个函数很重要 分别是 **数组根据索引排序**、**.back( )倒序检索** 很重要
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        vector<vector<int>> result;
+        sort(intervals.begin(),intervals.end());
+        for(auto& interval : intervals){
+            if(result.empty() || result.back()[1] < interval[0]){
+                result.push_back(interval);
+            }
+            else{
+                result.back()[1] = max(result.back()[1],interval[1]);
+            }
+        }
+        return result;
+    }
+};
+```
+
 
 
 
