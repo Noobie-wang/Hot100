@@ -1052,6 +1052,157 @@ public:
 };
 ```
 
+## 73.矩阵置零
+
+给定一个 `*m* x *n*` 的矩阵，如果一个元素为 **0** ，则将其所在行和列的所有元素都设为 **0** 。请使用 **[原地](http://baike.baidu.com/item/原地算法)** 算法**。** 
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2020/08/17/mat1.jpg)
+
+```
+输入：matrix = [[1,1,1],[1,0,1],[1,1,1]]
+输出：[[1,0,1],[0,0,0],[1,0,1]]
+```
+
+**示例 2：**
+
+![img](https://assets.leetcode.com/uploads/2020/08/17/mat2.jpg)
+
+```
+输入：matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+输出：[[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+```
+
+ 
+
+**提示：**
+
+- `m == matrix.length`
+- `n == matrix[0].length`
+- `1 <= m, n <= 200`
+- `-231 <= matrix[i][j] <= 231 - 1`
+
+###  先把第一行第一列隔离开(减少空间复杂度) 使用标记的形式传递信息 然后统计哪个位置出现了0 然后把整个一行一列全置为0 后续都从1开始(第0行0列为传递信息用)
+
+```c++
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        bool firstcol = false;
+        bool firstrow = false;
+        for(int i = 0; i<m;i++){
+            if(matrix[i][0]==0){
+                firstrow = true;
+            }
+        }
+        for(int j = 0;j<n;j++){
+            if(matrix[0][j]==0){
+                firstcol = true;
+            }
+        }
+        for(int i = 1; i<m; i++){
+            for(int j = 1; j<n;j++){
+                if(matrix[i][j] == 0){
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+        for(int i = 1; i<m; i++){
+            for(int j = 1; j<n;j++){
+                if(matrix[i][0] == 0 || matrix[0][j] == 0){
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        if(firstcol){
+            for(int j = 0 ;j<n;j++){
+                matrix[0][j]=0;
+            }
+        }
+        if(firstrow){
+            for(int i = 0; i<m;i++){
+                matrix[i][0]=0;
+            }
+        }
+    }
+};
+```
+
+## 54.螺旋矩阵
+
+给你一个 `m` 行 `n` 列的矩阵 `matrix` ，请按照 **顺时针螺旋顺序** ，返回矩阵中的所有元素。
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2020/11/13/spiral1.jpg)
+
+```
+输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+输出：[1,2,3,6,9,8,7,4,5]
+```
+
+**示例 2：**
+
+![img](https://assets.leetcode.com/uploads/2020/11/13/spiral.jpg)
+
+```
+输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+输出：[1,2,3,4,8,12,11,10,9,5,6,7]
+```
+
+ 
+
+**提示：**
+
+- `m == matrix.length`
+- `n == matrix[i].length`
+- `1 <= m, n <= 10`
+- `-100 <= matrix[i][j] <= 100`
+
+最重要的是弄清楚转的情况
+
+```c++
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> result;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int top = 0;
+        int bottom = m-1;
+        int left = 0;
+        int right = n-1;
+        while(top<=bottom && left <= right){
+            for(int i = left; i <= right; i++){
+                result.push_back(matrix[top][i]);
+            }
+            top++;
+            for(int j = top; j <= bottom;j++){
+                result.push_back(matrix[j][right]);
+            }
+            right--;
+            if(top<=bottom){
+                for(int i = right;i >= left;i--){
+                    result.push_back(matrix[bottom][i]);
+                }
+                bottom--;
+            }
+            if(left<=right){
+                for(int j = bottom; j >= top; j--){
+                    result.push_back(matrix[j][left]);
+                }
+                left++;
+            }
+        }
+        return result;
+    }
+};
+```
+
 
 
 
