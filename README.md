@@ -1,5 +1,5 @@
 # Hot100
-Two questions per day
+Two questions per days
 
 # 1.两数之和 
 
