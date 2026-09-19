@@ -1612,6 +1612,161 @@ public:
 };
 ```
 
+## 142.环形链表 II
+
+给定一个链表的头节点  `head` ，返回链表开始入环的第一个节点。 *如果链表无环，则返回 `null`。*
+
+如果链表中有某个节点，可以通过连续跟踪 `next` 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 `pos` 来表示链表尾连接到链表中的位置（**索引从 0 开始**）。如果 `pos` 是 `-1`，则在该链表中没有环。**注意：`pos` 不作为参数进行传递**，仅仅是为了标识链表的实际情况。
+
+**不允许修改** 链表。
+
+ 
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2018/12/07/circularlinkedlist.png)
+
+```
+输入：head = [3,2,0,-4], pos = 1
+输出：返回索引为 1 的链表节点
+解释：链表中有一个环，其尾部连接到第二个节点。
+```
+
+**示例 2：**
+
+![img](https://assets.leetcode.cn/aliyun-lc-upload/uploads/2018/12/07/circularlinkedlist_test2.png)
+
+```
+输入：head = [1,2], pos = 0
+输出：返回索引为 0 的链表节点
+解释：链表中有一个环，其尾部连接到第一个节点。
+```
+
+**示例 3：**
+
+![img](https://assets.leetcode.cn/aliyun-lc-upload/uploads/2018/12/07/circularlinkedlist_test3.png)
+
+```
+输入：head = [1], pos = -1
+输出：返回 null
+解释：链表中没有环。
+```
+
+**进阶：**你是否可以使用 `O(1)` 空间解决此题？
+
+###  有一个重要的规律 a=kc-b 也就是说从头节点到入环节点的距离 = 总长度-相遇节点的K倍
+
+```c++
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while(fast != nullptr && fast->next != nullptr){
+            slow = slow->next;
+            fast = fast->next->next;
+            if(fast == slow){
+                break;
+            } //判断是否有环
+        }
+        if(fast == nullptr || fast->next == nullptr){
+                return nullptr; //无环时返回nullptr
+            }
+        slow = head; //a = kc - b 此时把slow指到head、fast仍然是相遇点 两者循环相等时就是入环点 
+        while(slow != fast){
+            slow = slow->next;
+            fast = fast->next;
+        }
+        return slow;
+    }
+};
+```
+
+## 21.合并两个有序链表
+
+将两个升序链表合并为一个新的 **升序** 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 
+
+ 
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2020/10/03/merge_ex1.jpg)
+
+```
+输入：l1 = [1,2,4], l2 = [1,3,4]
+输出：[1,1,2,3,4,4]
+```
+
+**示例 2：**
+
+```
+输入：l1 = [], l2 = []
+输出：[]
+```
+
+**示例 3：**
+
+```
+输入：l1 = [], l2 = [0]
+输出：[0]
+```
+
+ 
+
+**提示：**
+
+- 两个链表的节点数目范围是 `[0, 50]`
+- `-100 <= Node.val <= 100`
+- `l1` 和 `l2` 均按 **非递减顺序** 排列
+
+### 思想很简单 重要的一些细节 首先创建一个新的链表 注意语法 接着list1 list2已经代表表头了 不用再创建一个指引着他们了 下一个 注意cur的更新 不要只顾着更新list1和list2 忘记更新cur
+
+```c++
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        ListNode* dummy = new ListNode(-1);
+        ListNode* cur = dummy;
+        while(list1 != nullptr && list2 != nullptr){
+            if(list1->val <= list2->val){
+                cur->next = list1;
+                list1 = list1->next;
+            }
+            else if(list1->val > list2->val){
+                cur->next = list2;
+                list2 = list2->next;
+            }
+            cur = cur->next;
+        } 
+        if(list1){
+            cur->next = list1;
+        }
+        if(list2){
+            cur->next = list2;
+        }
+        return dummy->next;
+    }
+};
+```
+
 
 
 
