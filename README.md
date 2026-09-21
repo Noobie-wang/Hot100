@@ -888,6 +888,24 @@ public:
     }
 };
 ```
+### 复习版 忘记了状态转移 想起来之后 没有记录历史最大的 而是错误的选取了最终最大的
+
+```c++
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int cur = nums[0];
+        int result = nums[0];
+        for(int i = 1; i < nums.size();i++){
+            cur = max(nums[i],nums[i]+cur);
+            result = max(cur,result);
+        }
+        return result;
+    }
+};
+```
+
+
 
 ## 56.合并区间
 
@@ -943,6 +961,30 @@ public:
     }
 };
 ```
+### 复习版 忘记了result是空的时候处理方式 忘记了数组的加入方式 
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        vector<vector<int>> result;
+        sort(intervals.begin(),intervals.end());
+       
+        for(auto& interval : intervals){
+            if(result.empty() || result.back()[1] < interval[0]){
+                result.push_back(interval);
+            }
+            else{
+                result.back()[1] = max(result.back()[1],interval[1]);
+            }
+        }
+        return result;
+    }
+};
+```
+
+
+
 
 ## 189.轮转数组
 
@@ -995,7 +1037,7 @@ public:
 };
 ```
 
-
+复习版 忘记了k 为n的余数 然后忘记了nums的组织方式 比如使用了nums[0] nums[k] 而不是nums.begin()和nums.begin()+k
 
 ## 238.除了自身以外数组的乘积
 
