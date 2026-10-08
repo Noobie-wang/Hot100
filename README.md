@@ -1809,6 +1809,76 @@ public:
 };
 ```
 
+## 19.删除链表的倒数第N个结点
+
+给你一个链表，删除链表的倒数第 `n` 个结点，并且返回链表的头结点。
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2020/10/03/remove_ex1.jpg)
+
+```
+输入：head = [1,2,3,4,5], n = 2
+输出：[1,2,3,5]
+```
+
+**示例 2：**
+
+```
+输入：head = [1], n = 1
+输出：[]
+```
+
+**示例 3：**
+
+```
+输入：head = [1,2], n = 1
+输出：[1]
+```
+
+**提示：**
+
+- 链表中结点的数目为 `sz`
+- `1 <= sz <= 30`
+- `0 <= Node.val <= 100`
+- `1 <= n <= sz`
+
+**进阶：**你能尝试使用一趟扫描实现吗？
+
+### 两个重要的部分 第一个： 为了一趟扫描，使用快慢指针，通过先让fast走n步，然后再让fast和slow同时走，fast走到最后时，slow走到倒数第n个 第二个：使用dummy 使dummy->next = head 创建格式为ListNode* dummy = new ListNode(0,head) 这样可以不用处理head部分
+
+
+
+```C++
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* dummy = new ListNode(0,head);
+        ListNode* slow = dummy;
+        ListNode* fast = dummy;
+        for(int i = 0;i < n;i++){
+            fast = fast->next;
+        }
+        while(fast->next != nullptr){
+            slow = slow->next;
+            fast = fast->next;
+        }
+        slow->next = slow->next->next;
+        return dummy->next;
+    }
+};
+```
+
 
 
 
