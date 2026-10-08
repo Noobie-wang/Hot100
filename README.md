@@ -1845,7 +1845,7 @@ public:
 
 **进阶：**你能尝试使用一趟扫描实现吗？
 
-### 两个重要的部分 第一个： 为了一趟扫描，使用快慢指针，通过先让fast走n步，然后再让fast和slow同时走，fast走到最后时，slow走到倒数第n个 第二个：使用dummy 使dummy->next = head 创建格式为ListNode* dummy = new ListNode(0,head) 这样可以不用处理head部分
+### 两个重要的部分 第一个： 为了一趟扫描，使用快慢指针，通过先让fast走n步，然后再让fast和slow同时走，fast走到最后时，slow走到倒数第n个 第二个：使用dummy 使dummy->next = head 创建格式为ListNode* dummy = new ListNode(0,head) 这样可以不用处理head部分 
 
 
 
