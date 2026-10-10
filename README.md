@@ -1941,6 +1941,174 @@ public:
     }
 };
 ```
+## 148.排序链表
+
+给你链表的头结点 `head` ，请将其按 **升序** 排列并返回 **排序后的链表** 。
+
+ 
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2020/09/14/sort_list_1.jpg)
+
+```
+输入：head = [4,2,1,3]
+输出：[1,2,3,4]
+```
+
+**示例 2：**
+
+![img](https://assets.leetcode.com/uploads/2020/09/14/sort_list_2.jpg)
+
+```
+输入：head = [-1,5,3,4,0]
+输出：[-1,0,3,4,5]
+```
+
+**示例 3：**
+
+```
+输入：head = []
+输出：[]
+```
+
+ 
+
+**提示：**
+
+- 链表中节点的数目在范围 `[0, 5 * 104]` 内
+- `-105 <= Node.val <= 105`
+
+**首先 选择归并排序 题目想要考察的是归并排序 当然也可以选择先存入数组 然后再sort 但是归并排序在链表中有得天独厚的优势**
+
+**然后在具体排序过程中 使用的是递归 先拆分为子集合 然后再编写merge函数进行合并 递归时注意递归出口(对长度的判断) 然后使用快慢指针寻找链表的中点(刚开始设置slow=head，fast=head->next) 找到中点之后对链表从中点进行一分为二 然后进行子集递归 分别定义为left和right 然后把left和right放入到merge中进行重排**
+
+```c++
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if(head == nullptr || head->next == nullptr){
+            return head;
+        }
+        ListNode* slow = head;
+        ListNode* fast = head->next;
+        while(fast->next && fast->next->next){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        ListNode* rightHead = slow->next;
+        slow->next = nullptr;
+        ListNode* left = sortList(head);
+        ListNode* right = sortList(rightHead);
+        return merge(left,right);
+    }
+    ListNode* merge(ListNode* l1, ListNode* l2){
+        ListNode dummy(0);
+        ListNode* cur = &dummy;
+        while(l1 != nullptr && l2!=nullptr){
+            if(l1->val <= l2->val){
+                cur->next = l1;
+                l1 = l1->next;
+            }
+            else{
+                cur->next = l2;
+                l2 = l2->next;
+            }
+            cur = cur->next;
+        }
+        if(l1){
+            cur->next = l1;
+        }
+        if(l2){
+            cur->next = l2;
+        }
+        return dummy.next;
+    }
+};
+```
+
+
+
+
+
+
+
+## 94.二叉树的中序遍历
+
+给定一个二叉树的根节点 `root` ，返回 *它的 **中序** 遍历* 。
+
+ 
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2020/09/15/inorder_1.jpg)
+
+```
+输入：root = [1,null,2,3]
+输出：[1,3,2]
+```
+
+**示例 2：**
+
+```
+输入：root = []
+输出：[]
+```
+
+**示例 3：**
+
+```
+输入：root = [1]
+输出：[1]
+```
+
+ 
+
+**提示：**
+
+- 树中节点数目在范围 `[0, 100]` 内
+- `-100 <= Node.val <= 100`
+
+ **使用递归的方法**
+
+```c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> res;
+        inorder(root,res);
+        return res;
+    }
+    void inorder(TreeNode* root, vector<int>& res){
+        if(root == nullptr) return;
+        inorder(root->left,res);
+        res.push_back(root->val);
+        inorder(root->right,res);
+    }
+};
+```
+
 
 
 
