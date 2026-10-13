@@ -2108,6 +2108,125 @@ public:
     }
 };
 ```
+## 104.二叉树的最大深度
+
+给定一个二叉树 `root` ，返回其最大深度。
+
+二叉树的 **最大深度** 是指从根节点到最远叶子节点的最长路径上的节点数。
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2020/11/26/tmp-tree.jpg)
+
+```
+输入：root = [3,9,20,null,null,15,7]
+输出：3
+```
+
+**示例 2：**
+
+```
+输入：root = [1,null,2]
+输出：2
+```
+
+**提示：**
+
+- 树中节点的数量在 `[0, 104]` 区间内。
+- `-100 <= Node.val <= 100`
+
+
+
+**使用递归最方便 找到左子树或者右子树的最大值 然后+根节点的1 就OK**
+
+```C++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if (root == nullptr){
+            return 0;
+        }
+        int left = maxDepth(root->left);
+        int right = maxDepth(root->right);
+        return max(left,right)+1;
+    }
+};
+```
+
+## 226.翻转二叉树
+
+给你一棵二叉树的根节点 `root` ，翻转这棵二叉树，并返回其根节点。
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2021/03/14/invert1-tree.jpg)
+
+```
+输入：root = [4,2,7,1,3,6,9]
+输出：[4,7,2,9,6,3,1]
+```
+
+**示例 2：**
+
+![img](https://assets.leetcode.com/uploads/2021/03/14/invert2-tree.jpg)
+
+```
+输入：root = [2,1,3]
+输出：[2,3,1]
+```
+
+**示例 3：**
+
+```
+输入：root = []
+输出：[]
+```
+
+**提示：**
+
+- 树中节点数目范围在 `[0, 100]` 内
+- `-100 <= Node.val <= 100`
+
+**和上一题一样 依旧递归 但是不一样的点在于 递归的返回值 应该是一整个子树 而不应该是一个int值 然后让左=右 右=左**
+
+```C++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        if(root == nullptr){
+            return nullptr;
+        }
+        TreeNode* left = invertTree(root->left);
+        TreeNode* right = invertTree(root->right);
+        root->left = right;
+        root->right = left;
+        return root;
+    }
+};
+```
+
 
 
 
