@@ -2226,6 +2226,102 @@ public:
     }
 };
 ```
+
+## 101.对称二叉树
+
+给你一个二叉树的根节点 `root` ， 检查它是否轴对称。
+
+**示例 1：**
+
+![img](https://pic.leetcode.cn/1698026966-JDYPDU-image.png)
+
+```
+输入：root = [1,2,2,3,4,4,3]
+输出：true
+```
+
+**示例 2：**
+
+![img](https://pic.leetcode.cn/1698027008-nPFLbM-image.png)
+
+```
+输入：root = [1,2,2,null,3,null,3]
+输出：false
+```
+
+**提示：**
+
+- 树中节点数目在范围 `[1, 1000]` 内
+- `-100 <= Node.val <= 100`
+
+**是判断镜像的递归 1.注意函数的位置 2.注意讨论镜像的情况 3.左左<->右右、左右<->右左**
+
+```C++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(root == nullptr){
+            return true;
+        }
+        return isMiorr(root->left,root->right);
+        
+    }
+    bool isMiorr(TreeNode* left,TreeNode* right){
+            if(left == nullptr && right == nullptr){
+                return true;
+            }
+            else if(left == nullptr || right == nullptr){
+                return false;
+            }
+            return left->val == right->val && isMiorr(left->left,right->right) && isMiorr(left->right, right->left);
+        }
+};
+```
+
+## 543.二叉树的直径
+
+给你一棵二叉树的根节点，返回该树的 **直径** 。
+
+二叉树的 **直径** 是指树中任意两个节点之间最长路径的 **长度** 。这条路径可能经过也可能不经过根节点 `root` 。
+
+两节点之间路径的 **长度** 由它们之间边数表示。
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2021/03/06/diamtree.jpg)
+
+```
+输入：root = [1,2,3,4,5]
+输出：3
+解释：3 ，取路径 [4,2,1,3] 或 [5,2,1,3] 的长度。
+```
+
+**示例 2：**
+
+```
+输入：root = [1,2]
+输出：1
+```
+
+**提示：**
+
+- 树中节点数目在范围 `[1, 104]` 内
+- `-100 <= Node.val <= 100`
+
+**感觉有点看不懂 理解上有点偏差 还要再看看**
+
+```C++
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -2255,6 +2351,8 @@ public:
         return max(left,right)+1;
     }
 };
+```
+
 
 
 
