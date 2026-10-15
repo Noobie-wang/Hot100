@@ -2352,8 +2352,145 @@ public:
     }
 };
 ```
+## 102.二叉树的层序遍历
+
+给你二叉树的根节点 `root` ，返回其节点值的 **层序遍历** 。 （即逐层地，从左到右访问所有节点）。
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2021/02/19/tree1.jpg)
+
+```
+输入：root = [3,9,20,null,null,15,7]
+输出：[[3],[9,20],[15,7]]
+```
+
+**示例 2：**
+
+```
+输入：root = [1]
+输出：[[1]]
+```
+
+**示例 3：**
+
+```
+输入：root = []
+输出：[]
+```
+
+**提示：**
+
+- 树中节点数目在范围 `[0, 2000]` 内
+- `-1000 <= Node.val <= 1000`
+
+**认真学习 感觉完全不会 认真体会result q level的各层级关系**
+
+```C++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> result;
+        if(root == nullptr){
+            return result;
+        }
+        queue<TreeNode*> q;
+        q.push(root);
+        while(!q.empty()){
+            int size = q.size();
+            vector<int> level;
+            for(int i = 0;i<size;i++){
+                TreeNode* node = q.front(); //容易忘记
+                q.pop(); //这两步容易忘记
+                level.push_back(node->val);
+                if(node->left != nullptr){
+                    q.push(node->left);
+                }
+                if(node->right != nullptr){
+                    q.push(node->right);
+                }
+                
+            }
+            result.push_back(level);
+        }
+        return result;
+    }
+};
+```
 
 
+
+## 108.将有序数组转换为二叉搜索树
+
+给你一个整数数组 `nums` ，其中元素已经按 **升序** 排列，请你将其转换为一棵 平衡 二叉搜索树。
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2021/02/18/btree1.jpg)
+
+```
+输入：nums = [-10,-3,0,5,9]
+输出：[0,-3,9,-10,null,5]
+解释：[0,-10,5,null,-3,null,9] 也将被视为正确答案：
+```
+
+**示例 2：**
+
+![img](https://assets.leetcode.com/uploads/2021/02/18/btree.jpg)
+
+```
+输入：nums = [1,3]
+输出：[3,1]
+解释：[1,null,3] 和 [3,1] 都是高度平衡二叉搜索树。
+```
+
+**提示：**
+
+- `1 <= nums.length <= 104`
+- `-104 <= nums[i] <= 104`
+- `nums` 按 **严格递增** 顺序排列
+
+**首先知道什么是平衡二叉搜索树，然后有一个找中点的语句 int mid = left+(right-left)/2 ; 创建新的结点的语句 new TreeNode(nums[mid])**
+```C++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        return build(nums, 0, nums.size()-1);
+    }
+    TreeNode* build(vector<int>& nums, int left, int right){
+        if(left > right){
+            return nullptr;
+        }
+        int mid = left + (right-left)/2;
+        TreeNode* root = new TreeNode(nums[mid]);
+        root->left = build(nums,left,mid-1);
+        root->right = build(nums,mid+1,right);
+        return root;
+    }
+};
+```
 
 
 
