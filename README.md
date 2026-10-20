@@ -2491,6 +2491,135 @@ public:
     }
 };
 ```
+## 98.验证二叉搜索树
+
+给你一个二叉树的根节点 `root` ，判断其是否是一个有效的二叉搜索树。
+
+**有效** 二叉搜索树定义如下：
+
+- 节点的左子树只包含 **严格小于** 当前节点的数。
+- 节点的右子树只包含 **严格大于** 当前节点的数。
+- 所有左子树和右子树自身必须也是二叉搜索树。
+
+ 
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2020/12/01/tree1.jpg)
+
+```
+输入：root = [2,1,3]
+输出：true
+```
+
+**示例 2：**
+
+![img](https://assets.leetcode.com/uploads/2020/12/01/tree2.jpg)
+
+```
+输入：root = [5,1,4,null,null,3,6]
+输出：false
+解释：根节点的值是 5 ，但是右子节点的值是 4 。
+```
+
+ 
+
+**提示：**
+
+- 树中节点数目范围在`[1, 104]` 内
+- `-231 <= Node.val <= 231 - 1`
+
+**LLONG_MIN LLONG_MAX 分别代表`long long` 能表达的最大值与最小值**
+
+```c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        return check(root,LLONG_MIN, LLONG_MAX);
+    }
+    bool check(TreeNode* root,long long lower,long long upper){
+        if(root == nullptr){
+            return true;
+        }
+        if(root->val <= lower || root->val >= upper){
+            return false;
+        }
+        return check(root->left,lower,root->val) && check(root->right,root->val,upper);
+    }
+};
+```
+
+## 230.二叉搜索树中第K小的元素
+
+给定一个二叉搜索树的根节点 `root` ，和一个整数 `k` ，请你设计一个算法查找其中第 `k` 小的元素（`k` 从 1 开始计数）。
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2021/01/28/kthtree1.jpg)
+
+```
+输入：root = [3,1,4,null,2], k = 1
+输出：1
+```
+
+**示例 2：**
+
+![img](https://assets.leetcode.com/uploads/2021/01/28/kthtree2.jpg)
+
+```
+输入：root = [5,3,6,2,4,null,null,1], k = 3
+输出：3
+```
+
+**提示：**
+
+- 树中的节点数为 `n` 。
+- `1 <= k <= n <= 104`
+- `0 <= Node.val <= 104`
+
+ **二叉搜索树就是已经严格中序排列之后的树 严格遵照左子树<根节点<右子树** 因此可以利用这个性质 先递归检索到最左侧的 然后存入数组 然后右子树
+
+```c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        vector<int> nums;
+        inorder(root,nums);
+        return nums[k-1];
+    }
+    void inorder(TreeNode* root, vector<int>& nums){
+        if(root == nullptr){
+            return;
+        }
+        inorder(root->left,nums);
+        nums.push_back(root->val);
+        inorder(root->right,nums);
+    }
+};
+```
+
 
 
 
