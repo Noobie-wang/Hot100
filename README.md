@@ -2619,6 +2619,162 @@ public:
     }
 };
 ```
+## 199.二叉树的右视图
+
+给定一个二叉树的 **根节点** `root`，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+
+**示例 1：**
+
+**输入：**root = [1,2,3,null,5,null,4]
+
+**输出：**[1,3,4]
+
+**解释：**
+
+![img](https://assets.leetcode.com/uploads/2024/11/24/tmpd5jn43fs-1.png)
+
+**示例 2：**
+
+**输入：**root = [1,2,3,4,null,null,null,5]
+
+**输出：**[1,3,4,5]
+
+**解释：**
+
+![img](https://assets.leetcode.com/uploads/2024/11/24/tmpkpe40xeh-1.png)
+
+**示例 3：**
+
+**输入：**root = [1,null,3]
+
+**输出：**[1,3]
+
+**示例 4：**
+
+**输入：**root = []
+
+**输出：**[]
+
+**提示:**
+
+- 二叉树的节点个数的范围是 `[0,100]`
+- `-100 <= Node.val <= 100`
+
+**首先第一个误区是 不能直接right->right 上面的图二就是例子 接着第二个就是其实就是层序遍历 BFS 然后再收集 i==size-1的时候 也就是队列中这一层的最后一个 这个就是层序的最后一个 也就是右视图所看到的**
+
+```C++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int> result;
+        if(root == nullptr){
+            return result;
+        }
+        queue<TreeNode*> q;
+        q.push(root);
+        while(!q.empty()){
+            int size = q.size();
+            for(int i = 0; i < size;i++){
+                TreeNode* node = q.front();
+                q.pop();
+                if(i==size-1){
+                    result.push_back(node->val);
+                }
+                if(node->left != nullptr){
+                    q.push(node->left);
+                }
+                if(node->right != nullptr){
+                    q.push(node->right);
+                }
+            }
+            
+        }
+        return result;
+    }
+};
+```
+
+## 114.二叉树展开为链表
+
+给你二叉树的根结点 `root` ，请你将它展开为一个单链表：
+
+- 展开后的单链表应该同样使用 `TreeNode` ，其中 `right` 子指针指向链表中下一个结点，而左子指针始终为 `null` 。
+- 展开后的单链表应该与二叉树 [先序遍历](https://baike.baidu.com/item/先序遍历/6442839?fr=aladdin) 顺序相同。
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2021/01/14/flaten.jpg)
+
+```
+输入：root = [1,2,5,3,4,null,6]
+输出：[1,null,2,null,3,null,4,null,5,null,6]
+```
+
+**示例 2：**
+
+```
+输入：root = []
+输出：[]
+```
+
+**示例 3：**
+
+```
+输入：root = [0]
+输出：[0]
+```
+
+**提示：**
+
+- 树中结点数在范围 `[0, 2000]` 内
+- `-100 <= Node.val <= 100`
+
+**进阶：**你可以使用原地算法（`O(1)` 额外空间）展开这棵树吗？
+
+**将左子树嫁接到右子树上 然后重要的就是找到左子树的最右边节点 具体处理时 向左找时 通过if语句 一个一个找 要一个一个接 然后找左子树的最右节点的时候要while 一下子找到底**
+
+```C++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        while(root != nullptr){
+            if(root->left != nullptr){
+                TreeNode* pre = root->left;
+                while(pre->right != nullptr){
+                    pre = pre->right;
+                }
+                pre->right = root->right;
+                root->right = root->left;
+                root->left = nullptr;
+            }
+            root = root->right;
+        }
+    }
+};
+```
+
 
 
 
