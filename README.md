@@ -2774,8 +2774,71 @@ public:
     }
 };
 ```
+## 105.从前序与中序遍历序列构造二叉树
 
+给定两个整数数组 `preorder` 和 `inorder` ，其中 `preorder` 是二叉树的**先序遍历**， `inorder` 是同一棵树的**中序遍历**，请构造二叉树并返回其根节点。
 
+**示例 1:**
+
+![img](https://assets.leetcode.com/uploads/2021/02/19/tree.jpg)
+
+```
+输入: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+输出: [3,9,20,null,null,15,7]
+```
+
+**示例 2:**
+
+```
+输入: preorder = [-1], inorder = [-1]
+输出: [-1]
+```
+
+**完全不会 现学的 具体来说 主要是划分 然后递归**
+
+**首先找到前序的第一个 作为root 然后创建新的root节点**
+
+**然后去中序中找root所在的index作为index**
+
+**接着通过中序序列相减确定了左子树和右子树的size**
+
+**然后递归的构造左子树与右子树**
+
+```C++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    unordered_map<int,int> pos; //直接在外面了
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        for(int i = 0; i < inorder.size();i++){
+            pos[inorder[i]] = i;
+        }
+        return build(preorder,0,preorder.size()-1,0,inorder.size()-1);
+    }
+    TreeNode* build(vector<int>& preorder,int preleft,int preright,int inleft, int inright){//这个也在外面
+        if(preleft > preright){
+            return nullptr;
+        }
+        int rootval = preorder[preleft];
+        TreeNode* root = new TreeNode(rootval);
+        int inindex = pos[rootval];
+        int leftsize = inindex - inleft;
+        root->left = build(preorder,preleft+1,preleft+leftsize,inleft,inindex-1);
+        root->right = build(preorder,preleft+leftsize+1,preright,inindex+1,inright);
+        return root;
+    }
+};
+```
 
 
 
